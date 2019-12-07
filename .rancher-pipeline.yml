@@ -1,0 +1,11 @@
+stages:
+- name: ReleaseBuild
+  steps:
+  - publishImageConfig:
+      dockerfilePath: ./Container.Deployed.Test/Dockerfile
+      buildContext: .
+      tag: release
+      pushRemote: true
+      registry: localhost:5000
+timeout: 60
+notification: {}
