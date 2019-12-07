@@ -1,0 +1,135 @@
+apiVersion: v1
+items:
+- apiVersion: apps/v1
+  kind: Deployment
+  metadata:
+    annotations:
+      deployment.kubernetes.io/revision: "17"
+      field.cattle.io/creatorId: user-9jxt5
+      field.cattle.io/publicEndpoints: '[{"port":30820,"protocol":"TCP","serviceName":"default:myapp-nodeport","allNodes":true}]'
+    creationTimestamp: "2019-12-07T18:47:52Z"
+    generation: 28
+    labels:
+      cattle.io/creator: norman
+      workload.user.cattle.io/workloadselector: deployment-default-myapp
+    name: myapp
+    namespace: default
+    resourceVersion: "172801"
+    selfLink: /apis/apps/v1/namespaces/default/deployments/myapp
+    uid: 131a33d6-1922-11ea-b5ac-00155db21703
+  spec:
+    minReadySeconds: 10
+    progressDeadlineSeconds: 600
+    replicas: 1
+    revisionHistoryLimit: 10
+    selector:
+      matchLabels:
+        workload.user.cattle.io/workloadselector: deployment-default-myapp
+    strategy:
+      rollingUpdate:
+        maxSurge: 1
+        maxUnavailable: 0
+      type: RollingUpdate
+    template:
+      metadata:
+        annotations:
+          cattle.io/timestamp: "2019-12-07T20:46:01Z"
+          field.cattle.io/ports: '[[{"containerPort":80,"dnsName":"myapp-nodeport","kind":"NodePort","name":"443tcp327720","protocol":"TCP"}]]'
+        creationTimestamp: null
+        labels:
+          workload.user.cattle.io/workloadselector: deployment-default-myapp
+      spec:
+        containers:
+        - envFrom:
+          - secretRef:
+              name: production-secrets
+              optional: false
+          image: localhost:5000/release
+          imagePullPolicy: Always
+          livenessProbe:
+            failureThreshold: 3
+            httpGet:
+              path: /test
+              port: 80
+              scheme: HTTP
+            initialDelaySeconds: 10
+            periodSeconds: 2
+            successThreshold: 1
+            timeoutSeconds: 2
+          name: myapp
+          ports:
+          - containerPort: 80
+            name: 443tcp327720
+            protocol: TCP
+          readinessProbe:
+            failureThreshold: 3
+            httpGet:
+              path: /test
+              port: 80
+              scheme: HTTP
+            initialDelaySeconds: 10
+            periodSeconds: 2
+            successThreshold: 2
+            timeoutSeconds: 2
+          resources: {}
+          securityContext:
+            allowPrivilegeEscalation: false
+            capabilities: {}
+            privileged: false
+            readOnlyRootFilesystem: false
+            runAsNonRoot: false
+          stdin: true
+          terminationMessagePath: /dev/termination-log
+          terminationMessagePolicy: File
+          tty: true
+        dnsConfig: {}
+        dnsPolicy: ClusterFirst
+        imagePullSecrets:
+        - name: local-registry
+        restartPolicy: Always
+        schedulerName: default-scheduler
+        securityContext: {}
+        terminationGracePeriodSeconds: 30
+  status:
+    availableReplicas: 1
+    conditions:
+    - lastTransitionTime: "2019-12-07T20:20:02Z"
+      lastUpdateTime: "2019-12-07T20:20:02Z"
+      message: Deployment has minimum availability.
+      reason: MinimumReplicasAvailable
+      status: "True"
+      type: Available
+    - lastTransitionTime: "2019-12-07T18:47:52Z"
+      lastUpdateTime: "2019-12-07T20:46:25Z"
+      message: ReplicaSet "myapp-75dc646cb8" has successfully progressed.
+      reason: NewReplicaSetAvailable
+      status: "True"
+      type: Progressing
+    observedGeneration: 28
+    readyReplicas: 1
+    replicas: 1
+    updatedReplicas: 1
+- apiVersion: v1
+  kind: Service
+  metadata:
+    creationTimestamp: "2019-12-07T00:55:39Z"
+    labels:
+      component: apiserver
+      provider: kubernetes
+    name: kubernetes
+    namespace: default
+    resourceVersion: "150"
+    selfLink: /api/v1/namespaces/default/services/kubernetes
+    uid: 49349df0-188c-11ea-86d5-00155db21703
+  spec:
+    clusterIP: 10.96.0.1
+    ports:
+    - name: https
+      port: 443
+      protocol: TCP
+      targetPort: 6443
+    sessionAffinity: None
+    type: ClusterIP
+  status:
+    loadBalancer: {}
+kind: List
