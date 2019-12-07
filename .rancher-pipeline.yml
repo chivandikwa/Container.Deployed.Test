@@ -5,7 +5,6 @@ stages:
       dockerfilePath: ./Container.Deployed.Test/Dockerfile
       buildContext: .
       tag: release
-      pushRemote: true
       registry: localhost:5000
 - name: Release
   steps:
