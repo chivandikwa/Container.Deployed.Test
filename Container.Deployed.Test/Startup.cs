@@ -12,6 +12,7 @@ namespace Container.Deployed.Test
     {
         public Startup(IConfiguration configuration)
         {
+
             var envKey = new EnvKeyConfig(); 
             envKey.Load();
         }

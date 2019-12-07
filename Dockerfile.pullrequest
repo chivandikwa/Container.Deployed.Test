@@ -1,0 +1,9 @@
+FROM mcr.microsoft.com/dotnet/core/aspnet:3.1-buster-slim AS base
+WORKDIR /app
+
+FROM mcr.microsoft.com/dotnet/core/sdk:3.1-buster AS build
+WORKDIR /src
+COPY . .
+RUN dotnet restore "./Container.Deployed.Test.sln"
+RUN dotnet build "./Container.Deployed.Test.sln" -c Release -o /app/build
+RUN dotnet test "./Container.Deployed.Test.sln" -c Release
